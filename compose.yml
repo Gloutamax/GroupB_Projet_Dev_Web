@@ -1,1 +1,36 @@
-# Fichier de configuration docker à configurer ici
+services: 
+  db: 
+    image: postgres:16
+    environment:
+      - USER=user
+      - PASSWORD= password
+      - DB_NAME= app_db
+    volumes: 
+      - db-data:/var/lib/postgresql/data
+
+  backend: 
+    image: node:latest
+    working_dir: /app
+    volumes: 
+    - ./backend:/app
+    environment: 
+      - DB_URL=postgresql://user:password@db:5432/app_db
+    depends_on:
+      - db
+    ports: 
+    - "3000:3000"
+    command: sh -c "npm install && npm run dev"
+
+  frontend:
+    image: node:latest
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    command: sh -c "npm install && npm run dev"
+  
+volumes: 
+    db-data:
