@@ -1,0 +1,4 @@
+# -- TEST DES REQUETTES HTTP POUR LES USERS -- 
+# Aficher tous les utilisateurs
+# TODO: Corriger erreur 404
+GET http://localhost:3000/users
