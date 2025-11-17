@@ -2,11 +2,6 @@ const { DataTypes, Model } = require("sequelize");
 const { connection } = require("../lib/db");
 //! Besoin de dépendances vers User et Material
 
-User.hasMany(Player, {
-  foreignKey: "clubId",
-});
-Player.belongsTo(Team);
-
 class Reservation extends Model {}
 
 Reservation.init(
