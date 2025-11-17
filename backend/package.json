@@ -1,4 +1,13 @@
 {
+  "name": "app",
+  "version": "1.0.0", 
+  "description": "",
+  "author": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch server.js", 
+    "start": "node server.js"
+  },
   "dependencies": {
     "bcrypt": "^6.0.0",
     "express": "^5.1.0",
