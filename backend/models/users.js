@@ -1,5 +1,5 @@
-const { DataTypes, Model } = require('sequelieze');
-const { connection } = require('../lib/database'); // ATTENTION A VOIR LE FICHER DE CONFIG FAIT PAR LES AUTRES MEMBRE DE L'EQUIPE
+const { DataTypes, Model } = require('sequelize');
+const { connection } = require('../lib/db'); 
 const bcrypt = require('bcrypt'); // Pour pouvoir hasher les mots de passe 
 
 class User extends Model {}

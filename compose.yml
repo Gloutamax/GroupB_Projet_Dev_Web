@@ -2,9 +2,9 @@ services:
   db: 
     image: postgres:16
     environment:
-      - USER=user
-      - PASSWORD= password
-      - DB_NAME= app_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=app_db
     volumes: 
       - db-data:/var/lib/postgresql/data
 
@@ -14,7 +14,11 @@ services:
     volumes: 
     - ./backend:/app
     environment: 
-      - DB_URL=postgresql://user:password@db:5432/app_db
+      - DB_HOST=db
+      - DB_NAME=app_db
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB_PORT=5432
     depends_on:
       - db
     ports: 
