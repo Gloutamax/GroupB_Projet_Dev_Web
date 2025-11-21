@@ -1,87 +1,53 @@
 const evaluatePasswordStrength = require('../routes/users').evaluatePasswordStrength;
-const users = [];
+const user = require('../models/users');
 
 module.exports = {
-    getAllUsers: (req, res) => {
-        res.json(users);
+    getAllUsers: async (req, res) => {
+        res.json(await user.findAll());
     },
-    getUserById: (req, res) => {
-        const userId = parseInt(req.params.id, 10);
-        const user = users.find((u) => u.id === userId);
-        if (!user) {
+    getUserById: async (req, res) => {
+        const id = parseInt(req.params.id, 10);
+        const foundUser = await user.findByPk(id);
+        if (!foundUser) {
             res.status(404).json({ error: "Utilisateur non trouvé." });
         } else {
-            res.json("Utilisateur choisi : " + user.name);
-            res.json(user);
+            res.json(foundUser);
         }
     },
-    createUser: (req, res) => {
-        const user_data = req.body;
-        const err = {};
-        const info = {}; 
-        if (!user_data.name) {
-            err.name = "Le champ nom est requis.";
+    createUser: async (req, res, next) => {
+        try {
+            res.status(201).json(await user.create(req.body));
+        } catch (error) {
+            next(error);
         }
-        if (!user_data.email) {
-            err.email = "Le champ email est requis.";
-        } else if (!/[a-z]+@[a-z]+\.[a-z]+/.test(user_data.email)) {
-            err.email = "Le format de l'email est invalide.";
-        }
-        if (!user_data.password) {
-            err.password = "Le champ mot de passe est requis.";
-        } else {
-            const passwordStrength = evaluatePasswordStrength(user_data.password);
-            info.passwordStrength = `Force du mot de passe : ${passwordStrength}`;
+    },
+    updateUser: async (req, res, next) => {
+        try {
+            const id = parseInt(req.params.id, 10);
+            const [nbUpdated, [user]] = await user.update(req.body, {
+                where: { id },
+                returning: true,
+                individualHooks: true,
+            });
+            if (nbUpdated === 0) {
+               return res.status(404).json({ error: "Utilisateur non trouvé." });
+            }
 
-            if (user_data.password.length < 6) {
-                info.passwordWarning = "Il est recommandé d'utiliser un mot de passe d'au moins 6 caractères.";
-            }
-        }
-        if (Object.keys(err).length > 0) {
-            res.status(422).json(err);
-        } else {
-            const new_user = {
-                ...user_data,
-                id: Date.now(),
-            };
-            users.push(new_user);
-            res.status(201).json({ message: "Utilisateur crée avec succès.", new_user, info });
+            return res.json(user);
+        } catch (error) {
+            next(error);
         }
     },
-    updateUser: (req, res) => {
-        const User_Data = req.body;
-        const userId = parseInt(req.params.id, 10);
-        const user = users.find((u) => u.id === userId);
-        if (!user) {
-            res.status(404).json({ error: "Utilisateur non trouvé." });
-        } else {
-            err.login = "La valeur est requise.";
-        }
-        if (User_Data.email) {
-            if (User_Data.email !== "") {
-                if (User_Data.email !== "") {
-                    err.email = "La valeur est requise.";
-                } else if (!/[a-z]+@[a-z]+\.[a-z]+/.test(User_Data.email)) {
-                    err.email = "Le format de l'email est invalide.";
-                }
+    deleteUser: async (req, res, next) => {
+        const id = parseInt(req.params.id, 10);
+        try {
+            const nbDeleted = await user.destroy({ where: { id } });
+            if (nbDeleted === 0) {
+                return res.status(404).json({ error: "Utilisateur non trouvé." });
             }
+            return res.json({ message: "Utilisateur supprimé avec succès." });
+        } catch (error) {
+            next(error);
         }
-        if (User_Data.password && User_Data.password !== "") {
-            err.password = "La valeur est requise.";
-        }
-        if (Object.keys(err).length > 0) {
-            res.status(422).json(err);
-        }
-        Object.assign(user, User_Data);
-        res.json({ message: "Utilisateur mis à jour avec succès.", user });
-    },
-    deleteUser: (req, res) => {
-        const userId = parseInt(req.params.id, 10);
-        const userIndex = users.findIndex((u) => u.id === userId);
-        if (userIndex === -1) {
-            res.status(404).json({ error: "Utilisateur non trouvé." });
-        }
-        users.splice(userIndex, 1);
-        res.json({ message: "Utilisateur supprimé avec succès." });
     }
 };

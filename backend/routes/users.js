@@ -1,6 +1,5 @@
 const { Router } = require('express'); 
 const router = Router();
-
 const UserController = require('../controllers/users');
 
 // Fonction pour évaluer la force du mot de passe
