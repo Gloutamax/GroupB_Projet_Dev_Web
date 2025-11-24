@@ -17,11 +17,14 @@ const initUserModel = async () => {
         email: {
             type: DataTypes.STRING,
             allowNull: false,
-            unique: true
+            unique: true,
+            validate: {
+                isEmail: true
+            }
         },
         password: {
             type: DataTypes.STRING,
-            allowNull: true
+            allowNull: false  // Changé de true à false
         }
     });
 

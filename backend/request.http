@@ -13,19 +13,81 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:3000/
+Content-Type: application/x-www-form-urlencoded
+
+username=testuser&email=testuser@example.com
+
+###
+POST http://localhost:3000/
+Content-Type: application/xml
+
+<user>
+    <username>exampleuser</username>
+    <password>examplepass</password>
+</user>
+
+###
+
 # -- TEST DES ROUTES UTILISATEURS --
 # Test de la route get pour récupérer tous les utilisateurs 
 GET http://localhost:3000/users
 
+### ==> RETURN 422
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "email": "testuser@example.com"
+}
+
+### ==> RETURN 422 - Email manquant
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "username": "testuser"
+}
+
+### ==> RETURN 422 - Password manquant
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "email": "testuser@example.com"
+}
+
+### ==> RETURN 422 - Email invalide
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "email": "invalidemail",
+    "password": "test123"
+}
+
+### ==> RETURN 201 - Création réussie
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "email": "testuser@example.com",
+    "password": "Test123!@#"
+}
 ###
-# Test de la route post pour créer un nouvel utilisateur
+# Creation de l'utilsiateur avec l'ID 1 pour les tests suivants 
 POST http://localhost:3000/users
 Content-Type: application/json
 
 {
     "id": 1,
-    "username": "testuser",
-    "email": "testuser@example.com"
+    "username": "jdaub",
+    "email": "jdaub@gmail.com",
+    "password": "StrongPassword1!"
 }
 
 ###
@@ -38,8 +100,8 @@ PATCH http://localhost:3000/users/1
 Content-Type: application/json
 
 {
-    "username": "updateduser",
-    "email": "updateduser@example.com"
+    "username": "daubj",
+    "email": "daubj@gmail.com"
 }
 
 ###
