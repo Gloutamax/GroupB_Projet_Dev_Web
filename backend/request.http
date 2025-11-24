@@ -15,12 +15,10 @@ Content-Type: application/json
 ###
 # -- TEST DES ROUTES UTILISATEURS --
 # Test de la route get pour récupérer tous les utilisateurs 
-# TODO : Corriger erreur 500 serveur
 GET http://localhost:3000/users
 
 ###
 # Test de la route post pour créer un nouvel utilisateur
-# TODO : Corriger erreur 404
 POST http://localhost:3000/users
 Content-Type: application/json
 
@@ -32,13 +30,11 @@ Content-Type: application/json
 
 ###
 # Test de la route get pour récupérer un utilisateur par ID
-# TODO : A tester avec un utilisateur de cette ID pour corriger l'erreur 500
 GET http://localhost:3000/users/1
 
 ###
 # Test de la route put pour mettre à jour un utilisateur par ID
-# TODO : A tester avec un utilisateur de cette ID pour corriger l'erreur 404
-PUT http://localhost:3000/users/1
+PATCH http://localhost:3000/users/1
 Content-Type: application/json
 
 {
@@ -48,5 +44,4 @@ Content-Type: application/json
 
 ###
 # Test de la route delete pour supprimer un utilisateur par ID
-# TODO : A tester avec un utilisateur de cette ID pour corriger l'erreur 404
 DELETE http://localhost:3000/users/1

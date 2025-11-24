@@ -24,12 +24,15 @@ module.exports.evaluatePasswordStrength = (password) => {
 router.get('/users', UserController.getAllUsers); 
 
 // Gestion de la création d'un utilisateur
-router.post('/user', UserController.createUser);
+router.post('/users', UserController.createUser);
 
+// Affichage d'un utilisateur par ID
 router.get('/users/:id', UserController.getUserById);
 
-router.patch('/user/:id', UserController.updateUser);
+// Mise à jour d'un utilisateur par ID
+router.patch('/users/:id', UserController.updateUser);
 
-router.delete('/user/:id', UserController.deleteUser);
+// Suppression d'un utilisateur par ID
+router.delete('/users/:id', UserController.deleteUser);
 
 module.exports = router;
