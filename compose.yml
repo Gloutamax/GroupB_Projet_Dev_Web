@@ -2,10 +2,10 @@ services:
   db: 
     image: postgres:16
     environment:
-      - USER=user
-      - PASSWORD= password
-      - DB_NAME= app_db
-    volumes: 
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+      - POSTGRES_DB=app_db
+    volumes:
       - db-data:/var/lib/postgresql/data
 
   backend: 
