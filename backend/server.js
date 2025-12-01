@@ -47,10 +47,6 @@ app.post("/", (req, res, next) => {
 });
 
 getConnection().then(async () => {
-    // Initialiser les modèles
-    const { initUserModel } = require("./models/users");
-    await initUserModel();
-    
     const userRouter = require("./routes/users");
     //TODO : Route pour les matériels a ajouter ici
     //TODO : Route pour les réservations a ajouter ici

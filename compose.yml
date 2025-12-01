@@ -14,11 +14,7 @@ services:
     volumes: 
     - ./backend:/app
     environment: 
-      - DB_HOST=db
-      - DB_NAME=app_db
-      - DB_USER=user
-      - DB_PASSWORD=password
-      - DB_PORT=5432
+      - DATABASE_URL=postgres://user:password@db:5432/app_db
     depends_on:
       - db
     ports: 
@@ -30,6 +26,8 @@ services:
     working_dir: /app
     volumes:
       - ./frontend:/app
+    environment:
+      - VITE_API_URL=http://localhost:3000
     depends_on:
       - backend
     ports:

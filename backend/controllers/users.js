@@ -1,15 +1,9 @@
 const { evaluatePasswordStrength } = require('../utils/passwordValidator');
-const DB = require('../lib/db');
-
-const getUser = async () => {
-    const connection = await DB.getConnection();
-    return connection.models.User;
-};
+const User = require('../models/users');
 
 module.exports = {
     getAllUsers: async (req, res) => {
         try {
-            const User = await getUser();
             const users = await User.findAll();
             res.json(users);
         } catch (error) {
@@ -19,7 +13,6 @@ module.exports = {
     },
     getUserById: async (req, res) => {
         try {
-            const User = await getUser();
             const id = parseInt(req.params.id, 10);
             const foundUser = await User.findByPk(id);
             if (!foundUser) {
@@ -63,7 +56,6 @@ module.exports = {
                 return res.status(422).json(err);
             }
 
-            const User = await getUser();
             const newUser = await User.create(user_data);
             res.status(201).json({ 
                 message: "Utilisateur créé avec succès.", 
@@ -82,11 +74,10 @@ module.exports = {
             }
             
             res.status(500).json({ error: 'Erreur lors de la création de l\'utilisateur' });
-        }
+        } 
     },
     updateUser: async (req, res, next) => {
         try {
-            const User = await getUser();
             const id = parseInt(req.params.id, 10);
             const [nbUpdated, [user]] = await User.update(req.body, {
                 where: { id },
@@ -104,7 +95,6 @@ module.exports = {
     },
     deleteUser: async (req, res, next) => {
         try {
-            const User = await getUser();
             const id = parseInt(req.params.id, 10);
             const nbDeleted = await User.destroy({ where: { id } });
             if (nbDeleted === 0) {
