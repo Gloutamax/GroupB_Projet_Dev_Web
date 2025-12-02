@@ -1,0 +1,50 @@
+const { DataTypes, Model } = require("sequelize");
+const { connection } = require("../lib/db");
+//! Besoin de dépendances vers User et Material
+
+class Reservation extends Model {}
+
+Reservation.init(
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    materialId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    dateStart: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    dateEnd: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+  },
+  {
+    sequelize: connection,
+    tableName: "reservations",
+    underscored: true,
+  }
+);
+
+// Associations
+Reservation.belongsTo(User, { foreignKey: "userId" });
+Reservation.belongsTo(Materiel, { foreignKey: "materielId" });
+
+export default Reservation;
