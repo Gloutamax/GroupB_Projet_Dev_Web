@@ -7,7 +7,7 @@ module.exports = async function checkAuth(req, res, next) {
     const authorizationHeader = headers.authorization ?? headers.Authorization; 
 
     if (!authorizationHeader) {
-        return res.sendstatus(401).json({ message: 'Unauthorized' });
+        return res.status(401).json({ message: 'Unauthorized' });
     }
 
     const [type, token] = authorizationHeader.split(/\s+/);
@@ -23,11 +23,11 @@ module.exports = async function checkAuth(req, res, next) {
         );
         const user = await User.findByPk(payload.user_id);
 
-        if (!user) return res.sendstatus(401).json({ message : 'Unauthorized' });
+        if (!user) return res.status(401).json({ message : 'Unauthorized' });
 
         req.user = user; 
         next();
     } catch {
-        return res.sendStatus(401).json({ message: 'Unauthorized' });
+        return res.status(401).json({ message: 'Unauthorized' });
     }
 }; 
