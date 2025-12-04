@@ -1,6 +1,7 @@
 const { DataTypes, Model } = require("sequelize");
 const { connection } = require("../lib/db");
-//! Besoin de dépendances vers User et Material
+const User = require("./users");
+//! Besoin de dépendances vers Material
 
 class Reservation extends Model {}
 
@@ -45,6 +46,6 @@ Reservation.init(
 
 // Associations
 Reservation.belongsTo(User, { foreignKey: "userId" });
-Reservation.belongsTo(Materiel, { foreignKey: "materielId" });
+//Reservation.belongsTo(Materiel, { foreignKey: "materielId" });
 
-export default Reservation;
+module.exports = Reservation;

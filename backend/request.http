@@ -107,3 +107,6 @@ Content-Type: application/json
 ###
 # Test de la route delete pour supprimer un utilisateur par ID
 DELETE http://localhost:3000/users/1
+
+###
+GET http://localhost:3000/localhost:3000/reservation
