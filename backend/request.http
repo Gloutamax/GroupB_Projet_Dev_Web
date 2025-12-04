@@ -30,7 +30,52 @@ Content-Type: application/xml
 ###
 
 # -- TEST DES ROUTES UTILISATEURS --
-# Test de la route get pour récupérer tous les utilisateurs 
+## 1. Tests des fonctions de sécurités (authentification, validation des données, gestion des rôles)
+# Création d'un utilisateur admin (temporairement sans auth)
+POST http://localhost:3000/users
+Content-Type : application/json
+
+{
+    "id": 1,
+    "username": "admin",
+    "email": "admin@example.com",
+    "password": "AdminPass123!",
+    "role": "ADMIN"
+}
+
+###
+# Se connecter et récupérer le token JWT pour le compte admin
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email": "admin@example.com",
+    "password": "AdminPass123!"
+}
+
+###
+
+# Se connecter et récupérer le token JWT pour le compte utilisateur
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email": "jdaub@gmail.com",
+    "password": "StrongPassword1!"
+}
+
+###
+# Utiliser le token pour accéder aux routes protégées 
+GET http://localhost:3000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJpYXQiOjE3NjQ4MzQ0MTZ9.wco0V_1HIutz2DtVGECitB8ehMgGDgiAJ9qsNxAr_3w
+
+###
+# Test de la route get pour récupérer tous les utilisateurs (interdit pour les USER => 403 Forbidden)
+GET http://localhost:3000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ3NTY1OTZ9.0P2utR5UinvnIThXiO6iMOyptCW1XS7EeZurZ0RBOp8
+
+###
+# Test de la route get sans authentification (=> 401 Unauthorized)
 GET http://localhost:3000/users
 
 ### ==> RETURN 422
@@ -79,20 +124,29 @@ Content-Type: application/json
     "password": "Test123!@#"
 }
 ###
-# Creation de l'utilsiateur avec l'ID 1 pour les tests suivants 
+# Creation de l'utilisateur avec l'ID 2 (utilisateur) pour les tests suivants
 POST http://localhost:3000/users
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJpYXQiOjE3NjQ4MzQ0MTZ9.wco0V_1HIutz2DtVGECitB8ehMgGDgiAJ9qsNxAr_3w
 
 {
-    "id": 1,
+    "id": 2,
     "username": "jdaub",
     "email": "jdaub@gmail.com",
     "password": "StrongPassword1!"
 }
 
 ###
-# Test de la route get pour récupérer un utilisateur par ID
+# Test de la route get pour récupérer un utilisateur par ID (avec le même ID de l'utilisateur qui souhaite voir ces données)
 GET http://localhost:3000/users/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ3NTY1OTZ9.0P2utR5UinvnIThXiO6iMOyptCW1XS7EeZurZ0RBOp8
+
+###
+
+# Vérifier qu'un utilisateur ne connecté ne peut pas voir les données d'un autre utilisateur (interdit pour les USER => 403 Forbidden)
+#! Non sécurisée
+GET http://localhost:3000/users/3
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ3NTY1OTZ9.0P2utR5UinvnIThXiO6iMOyptCW1XS7EeZurZ0RBOp8
 
 ###
 # Test de la route put pour mettre à jour un utilisateur par ID
@@ -102,6 +156,19 @@ Content-Type: application/json
 {
     "username": "daubj",
     "email": "daubj@gmail.com"
+}
+
+###
+
+# Tentative de mise à jour d'un autre utilisateur (intedit pour les USER => 403 Forbidden) 
+#! Non sécurisée
+PATCH http://localhost:3000/users/1
+Content-Type: application/Json
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ3NTY1OTZ9.0P2utR5UinvnIThXiO6iMOyptCW1XS7EeZurZ0RBOp8
+
+{ 
+    "username": "otheruser",
+    "email": "otheruser@example.com"
 }
 
 ###
