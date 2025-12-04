@@ -72,7 +72,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJpY
 ###
 # Test de la route get pour récupérer tous les utilisateurs (interdit pour les USER => 403 Forbidden)
 GET http://localhost:3000/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ3NTY1OTZ9.0P2utR5UinvnIThXiO6iMOyptCW1XS7EeZurZ0RBOp8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ4NDI5NDh9.IrKRw_ScFsLZj1TcHgEsE4BXH0Ca3AM2nJdRWWx53QY
 
 ###
 # Test de la route get sans authentification (=> 401 Unauthorized)
@@ -130,7 +130,7 @@ Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJpYXQiOjE3NjQ4MzQ0MTZ9.wco0V_1HIutz2DtVGECitB8ehMgGDgiAJ9qsNxAr_3w
 
 {
-    "id": 2,
+    "id": 1,
     "username": "jdaub",
     "email": "jdaub@gmail.com",
     "password": "StrongPassword1!"
@@ -139,19 +139,19 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJpY
 ###
 # Test de la route get pour récupérer un utilisateur par ID (avec le même ID de l'utilisateur qui souhaite voir ces données)
 GET http://localhost:3000/users/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ3NTY1OTZ9.0P2utR5UinvnIThXiO6iMOyptCW1XS7EeZurZ0RBOp8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ4NDI5NDh9.IrKRw_ScFsLZj1TcHgEsE4BXH0Ca3AM2nJdRWWx53QY
 
 ###
 
-# Vérifier qu'un utilisateur ne connecté ne peut pas voir les données d'un autre utilisateur (interdit pour les USER => 403 Forbidden)
-#! Non sécurisée
+# Vérifier qu'un utilisateur connecté ne peut pas voir les données d'un autre utilisateur (interdit pour les USER => 403 Forbidden)
 GET http://localhost:3000/users/3
-Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ3NTY1OTZ9.0P2utR5UinvnIThXiO6iMOyptCW1XS7EeZurZ0RBOp8
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ4NDI5NDh9.IrKRw_ScFsLZj1TcHgEsE4BXH0Ca3AM2nJdRWWx53QY
 
 ###
 # Test de la route put pour mettre à jour un utilisateur par ID
 PATCH http://localhost:3000/users/1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ4NDI5NDh9.IrKRw_ScFsLZj1TcHgEsE4BXH0Ca3AM2nJdRWWx53QY
 
 {
     "username": "daubj",
@@ -160,11 +160,10 @@ Content-Type: application/json
 
 ###
 
-# Tentative de mise à jour d'un autre utilisateur (intedit pour les USER => 403 Forbidden) 
-#! Non sécurisée
-PATCH http://localhost:3000/users/1
+# Tentative de mise à jour d'un autre utilisateur (interdit pour les USER => 403 Forbidden) 
+PATCH http://localhost:3000/users/3
 Content-Type: application/Json
-Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ3NTY1OTZ9.0P2utR5UinvnIThXiO6iMOyptCW1XS7EeZurZ0RBOp8
+Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ4NDI5NDh9.IrKRw_ScFsLZj1TcHgEsE4BXH0Ca3AM2nJdRWWx53QY
 
 { 
     "username": "otheruser",
@@ -174,3 +173,9 @@ Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJp
 ###
 # Test de la route delete pour supprimer un utilisateur par ID
 DELETE http://localhost:3000/users/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ4NDI5NDh9.IrKRw_ScFsLZj1TcHgEsE4BXH0Ca3AM2nJdRWWx53QY
+
+###
+# Tentative de suppression d'un autre utilisateur (interdit pour les USER => 403 Forbidden)
+DELETE http://localhost:3000/users/3
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ4NDI5NDh9.IrKRw_ScFsLZj1TcHgEsE4BXH0Ca3AM2nJdRWWx53QY

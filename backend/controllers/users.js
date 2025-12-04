@@ -14,6 +14,12 @@ module.exports = {
     getUserById: async (req, res) => {
         try {
             const id = parseInt(req.params.id, 10);
+            
+            // Vérifier si l'utilisateur est USER et tente d'accéder aux données d'un autre utilisateur
+            if (req.user.role === 'USER' && req.user.id !== id) {
+                return res.status(403).json({ error: "Accès interdit. Vous ne pouvez consulter que vos propres données." });
+            }
+            
             const foundUser = await User.findByPk(id);
             if (!foundUser) {
                 res.status(404).json({ error: "Utilisateur non trouvé." });
@@ -79,6 +85,12 @@ module.exports = {
     updateUser: async (req, res, next) => {
         try {
             const id = parseInt(req.params.id, 10);
+            
+            // Vérifier si l'utilisateur est USER et tente de modifier les données d'un autre utilisateur
+            if (req.user.role === 'USER' && req.user.id !== id) {
+                return res.status(403).json({ error: "Accès interdit. Vous ne pouvez modifier que vos propres données." });
+            }
+            
             const [nbUpdated, [user]] = await User.update(req.body, {
                 where: { id },
                 returning: true,
@@ -96,6 +108,12 @@ module.exports = {
     deleteUser: async (req, res, next) => {
         try {
             const id = parseInt(req.params.id, 10);
+            
+            // Vérifier si l'utilisateur est USER et tente de supprimer un autre utilisateur
+            if (req.user.role === 'USER' && req.user.id !== id) {
+                return res.status(403).json({ error: "Accès interdit. Vous ne pouvez supprimer que votre propre compte." });
+            }
+            
             const nbDeleted = await User.destroy({ where: { id } });
             if (nbDeleted === 0) {
                 return res.status(404).json({ error: "Utilisateur non trouvé." });
