@@ -122,5 +122,69 @@ module.exports = {
         } catch (error) {
             next(error);
         }
-    }
+    },
+    signupUser: async (req, res, next) => {
+        try {
+            const user_data = req.body;
+            const err = {};
+            const info = {};
+
+            // Validation des champs
+            if (!user_data.username) {
+                err.username = "Le champ nom d'utilisateur est requis.";
+            }
+            if (!user_data.email) {
+                err.email = "Le champ email est requis.";
+            } else if (!/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(user_data.email)) {
+                err.email = "Le format de l'email est invalide.";
+            }
+            if (!user_data.password) {
+                err.password = "Le champ mot de passe est requis.";
+            } else {
+                const passwordStrength = evaluatePasswordStrength(user_data.password);
+                info.passwordStrength = `Force du mot de passe : ${passwordStrength}`;
+                
+                if (user_data.password.length < 6) {
+                    info.passwordWarning = "Il est recommandé d'utiliser un mot de passe d'au moins 6 caractères.";
+                }
+            }
+
+            // Si des erreurs de validation existent, retourner 422
+            if (Object.keys(err).length > 0) {
+                return res.status(422).json(err);
+            }
+
+            // Forcer le rôle à USER et ignorer le rôle fourni dans la requête
+            const safeUserData = {
+                username: user_data.username,
+                email: user_data.email,
+                password: user_data.password,
+                role: "USER" // Forcer le rôle à USER
+            };
+
+            const newUser = await User.create(safeUserData);
+            res.status(201).json({ 
+                message: "Inscription réussie.", 
+                user: {
+                    id: newUser.id,
+                    username: newUser.username,
+                    email: newUser.email,
+                    role: newUser.role
+                },
+                info 
+            });
+        } catch (error) {
+            console.error('Error creating user:', error);
+            
+            // Gestion des erreurs Sequelize
+            if (error.name === 'SequelizeUniqueConstraintError') {
+                return res.status(422).json({ email: "Cet email est déjà utilisé." });
+            }
+            if (error.name === 'SequelizeValidationError') {
+                return res.status(422).json({ error: error.errors.map(e => e.message).join(', ') });
+            }
+            
+            res.status(500).json({ error: 'Erreur lors de l\'inscription' });
+        } 
+    },
 };

@@ -30,8 +30,11 @@ Content-Type: application/xml
 ###
 
 # -- TEST DES ROUTES UTILISATEURS --
-## 1. Tests des fonctions de sécurités (authentification, validation des données, gestion des rôles)
-# Création d'un utilisateur admin (temporairement sans auth)
+# Test de la route get pour récupérer tous les utilisateurs (401 car pas d'authentification)
+GET http://localhost:3000/users
+
+###
+# Test de la route post pour créer un nouvel utilisateur
 POST http://localhost:3000/users
 Content-Type : application/json
 
@@ -179,3 +182,50 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpY
 # Tentative de suppression d'un autre utilisateur (interdit pour les USER => 403 Forbidden)
 DELETE http://localhost:3000/users/3
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ4NDI5NDh9.IrKRw_ScFsLZj1TcHgEsE4BXH0Ca3AM2nJdRWWx53QY
+
+###
+# Inscription publique (sans authentification)
+POST http://localhost:3000/signup
+Content-Type: application/json
+
+{
+    "username": "newuser",
+    "email": "newuser@example.com",
+    "password": "SecurePass123!"
+}
+
+###
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email": "newuser@example.com",
+    "password": "SecurePass123!"
+}
+
+###
+
+# Tentative d'inscription en tant qu'admin (le rôle sera ignoré et forcé à USER)
+POST http://localhost:3000/signup
+Content-Type: application/json
+
+{
+    "username": "hacker",
+    "email": "hacker@example.com",
+    "password": "HackPass123!",
+    "role": "ADMIN"
+}
+
+###
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email": "hacker@example.com",
+    "password": "HackPass123!"
+}
+
+###
+# Vérifier que l'utilisateur "hacker" n'a pas les droits d'admin
+GET http://localhost:3000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozNywiaWF0IjoxNzY1MTM1NjUyfQ.6mzOWDJCmpyy1-nv8J_HpyL343pH18zpaXtKSKX3p-4
