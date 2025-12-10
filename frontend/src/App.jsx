@@ -1,35 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import './App.css';
+import Button from './components/button';
+import RegisterForm from "./views/security/register-form";
+import LoginForm from "./views/security/login-form";
+// TODO: Importation de la vue Utilisateur
+// TODO: Importation de la vue Administrateur
 
 function App() {
-  const [count, setCount] = useState(0)
+  const token = localStorage.getItem("token");
+  let userDecoded = null;
+  if (token) {
+    const [, payloadEncoded] = token.split(".");
+    userDecoded = JSON.parse(atob(payloadEncoded));
+  }
+  const [user, setUser] = useState(userDecoded);
+
+  function handleLogout() {
+    localStorage.removeItem("token");
+    setUser(null);
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="header">
+        <h1>Welcome to the material location website</h1>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
+      <div className="login">
+        {user === null && (
+          <>
+            <h2>Register</h2>
+            <RegisterForm />
+            <h2>Login</h2>
+            <LoginForm setUser={setUser} />
+          </>
+        )}
+        {user && (
+          <>
+            <h2>Hello, {user.username}</h2>
+            <Button
+              variant="delete"
+              title="Se déconnecter"
+              onClick={handleLogout}
+            />
+            {/* TODO : Afficher ici vue utilisateur (à ajuster ensuite) */}
+          </>
+        )}
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
