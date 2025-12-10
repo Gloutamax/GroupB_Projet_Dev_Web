@@ -3,7 +3,7 @@ import './App.css';
 import Button from './components/button';
 import RegisterForm from "./views/security/register-form";
 import LoginForm from "./views/security/login-form";
-// TODO: Importation de la vue Utilisateur
+import UserView from "./views/user/user";
 // TODO: Importation de la vue Administrateur
 
 function App() {
@@ -42,7 +42,7 @@ function App() {
               title="Se déconnecter"
               onClick={handleLogout}
             />
-            {/* TODO : Afficher ici vue utilisateur (à ajuster ensuite) */}
+            <UserView />
           </>
         )}
       </div>
