@@ -32,10 +32,10 @@ function UserView({ user, setUser }) {
                 <span style={{ marginLeft: 5 }}>{user.email}</span>
                 <Button
                     variant="icon"
-                    title="v"
+                    title="Modifier"
                     onClick={() => setEditMode((prev) => !prev)}
                 />
-                <Button variant="delete" title="X" onClick={handleDelete} />
+                <Button variant="delete" title="Supprimer" onClick={handleDelete} />
             </div>
             {editMode && (
                 <form onSubmit={handleEdit}>

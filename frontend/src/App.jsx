@@ -4,7 +4,6 @@ import Button from './components/button';
 import RegisterForm from "./views/security/register-form";
 import LoginForm from "./views/security/login-form";
 import UserView from "./views/user/user";
-// TODO: Importation de la vue Administrateur
 
 function App() {
   const token = localStorage.getItem("token");
@@ -12,7 +11,7 @@ function App() {
   if (token) {
     const [, payloadEncoded] = token.split(".");
     userDecoded = JSON.parse(atob(payloadEncoded));
-    console.log("User decoded:", userDecoded); // Pour déboguer
+    console.log("User decoded:", userDecoded); 
   }
   const [user, setUser] = useState(userDecoded);
 
