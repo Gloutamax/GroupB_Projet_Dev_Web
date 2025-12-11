@@ -1,4 +1,4 @@
-const Reservation = require("../models/reservation");
+const Reservation = require("../models/reservations");
 
 module.exports = {
   cget: async (req, res) => {

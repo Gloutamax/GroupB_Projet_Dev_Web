@@ -109,4 +109,16 @@ Content-Type: application/json
 DELETE http://localhost:3000/users/1
 
 ###
-GET http://localhost:3000/localhost:3000/reservation
+GET http://localhost:3000/reservations
+
+###
+POST http://localhost:3000/reservations
+Content-Type: application/json
+
+{
+    "title": "Reservation Test",
+    "description": "This is a test reservation"
+}
+
+###
+DELETE http://localhost:3000/reservations/2

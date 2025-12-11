@@ -16,7 +16,7 @@ Reservation.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    materialId: {
+    materielId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -28,13 +28,13 @@ Reservation.init(
       type: DataTypes.TEXT,
       allowNull: true,
     },
-    dateStart: {
+    startDate: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
     },
-    dateEnd: {
+    endDate: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
     },
   },
   {

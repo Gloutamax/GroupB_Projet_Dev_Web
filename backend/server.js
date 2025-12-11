@@ -52,12 +52,12 @@ getConnection()
   .then(async () => {
     const userRouter = require("./routes/users");
     //TODO : Route pour les matériels a ajouter ici
-    const userReservation = require("./routes/reservation");
+    const reservationRouter = require("./routes/reservations");
     //TODO : Route pour le suivi d'usage a ajouter ici
 
     app.use(userRouter);
     //TODO : Utilisation de la route pour les matériels a ajouter ici
-    app.use(userReservation);
+    app.use(reservationRouter);
     //TODO : Utilisation de la route pour le suivi d'usage a ajouter ici
 
     app.listen(3000, () => {
