@@ -13,16 +13,34 @@ function UserView({ user, setUser }) {
             username: form.username.value,
             email: form.email.value,
         };
+        
+        // Ajouter le mot de passe seulement s'il est renseigné
+        if (form.password.value) {
+            values.password = form.password.value;
+        }
 
-        const content = await UserService.updateUser(user.id, values);
-        setUser((prev) =>
-        prev.map((u) => (u.id === content.id ? content : u))
-        );
+        try {
+            const content = await UserService.updateUser(user.id, values);
+            setUser((prev) =>
+                prev.map((u) => (u.id === content.id ? content : u))
+            );
+            setEditMode(false);
+        } catch (error) {
+            alert("Erreur lors de la mise à jour");
+            console.error(error);
+        }
     }
 
     async function handleDelete() {
-        await UserService.deleteUser(user.id);
-        setUser((prev) => prev.filter((u) => u.id !== user.id))
+        if (confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur ${user.username} ?`)) {
+            try {
+                await UserService.deleteUser(user.id);
+                setUser((prev) => prev.filter((u) => u.id !== user.id));
+            } catch (error) {
+                alert("Erreur lors de la suppression");
+                console.error(error);
+            }
+        }
     }
 
     return (
