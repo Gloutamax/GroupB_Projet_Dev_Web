@@ -1,4 +1,4 @@
-const Matériaux = require("../Modèles/matériel.js");
+const Matériaux = require("../models/materiel");
 module.exports ={
 
  cget: async (req, res) => {

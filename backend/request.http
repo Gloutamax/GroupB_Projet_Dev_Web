@@ -1,0 +1,35 @@
+### Récupérer tous les matériaux
+GET http://localhost:3000/materials
+
+### Créer un matériel valide
+POST http://localhost:3000/materials
+Content-Type: application/json
+
+{
+  "name": "Caméra HD",
+  "description": "Caméra 4K",
+  "status": "available"
+}
+
+### Créer un matériel invalide (→ 422 si ton modèle a des validations Sequelize)
+POST http://localhost:3000/materials
+Content-Type: application/json
+
+{
+  "title": "oops",
+  "email": "not-expected@example.com"
+}
+
+### Récupérer un matériel par ID
+GET http://localhost:3000/materials/1
+
+### Modifier un matériel (PATCH)
+PATCH http://localhost:3000/materials/1
+Content-Type: application/json
+
+{
+  "status": "maintenance"
+}
+
+### Supprimer un matériel
+DELETE http://localhost:3000/materials/1
