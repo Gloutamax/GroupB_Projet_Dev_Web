@@ -44,11 +44,8 @@ Reservation.init(
   }
 );
 
-// Associations
-//Reservation.belongsTo(User, { foreignKey: "userId" });
-//Reservation.belongsTo(Materiel, { foreignKey: "materielId" });
-
 //hooks
+//! Besoin du hook pour materiel
 Reservation.addHook("beforeCreate", async (reservation, options) => {
   const user = await User.findByPk(reservation.userId);
   if (!user) {
