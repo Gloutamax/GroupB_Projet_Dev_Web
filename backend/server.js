@@ -48,11 +48,13 @@ app.post("/", (req, res, next) => {
 
 getConnection().then(async () => {
     const userRouter = require("./routes/users");
+    const securityRouter = require("./routes/security");
     //TODO : Route pour les matériels a ajouter ici
     //TODO : Route pour les réservations a ajouter ici
     //TODO : Route pour le suivi d'usage a ajouter ici
 
     app.use(userRouter);
+    app.use(securityRouter);
     //TODO : Utilisation de la route pour les matériels a ajouter ici
     //TODO : Utilisation de la route pour les réservations a ajouter ici
     //TODO : Utilisation de la route pour le suivi d'usage a ajouter ici
