@@ -3,11 +3,11 @@ import { useState } from "react";
 import Button from "../../components/button"; 
 import UserService from "../../services/user-service";
 
-function UserView({ user, setUser }) {
+function UserView({ user, setUser, currentUserId, onSelfDelete }) {
     const [editMode, setEditMode] = useState(false);
 
     async function handleEdit(event) {
-        event.preventDefault(); // Correction: preventDefault au lieu de preventDeafault
+        event.preventDefault();
         const form = event.currentTarget;
         const values = {
             username: form.username.value,
@@ -35,7 +35,13 @@ function UserView({ user, setUser }) {
         if (confirm(`Êtes-vous sûr de vouloir supprimer l'utilisateur ${user.username} ?`)) {
             try {
                 await UserService.deleteUser(user.id);
-                setUser((prev) => prev.filter((u) => u.id !== user.id));
+                
+                // Si l'utilisateur supprime son propre compte
+                if (user.id === currentUserId) {
+                    onSelfDelete();
+                } else {
+                    setUser((prev) => prev.filter((u) => u.id !== user.id));
+                }
             } catch (error) {
                 alert("Erreur lors de la suppression");
                 console.error(error);
@@ -141,6 +147,14 @@ export default function UserList() {
         form.reset();
     }
 
+    function handleSelfDelete() {
+        // Déconnecter l'utilisateur
+        localStorage.removeItem("token");
+        alert("Votre compte a été supprimé avec succès. Vous allez être redirigé vers la page de connexion.");
+        // Recharger la page pour revenir à l'état non connecté
+        window.location.reload();
+    }
+
     return (
         <div style={{ padding: '20px' }}>
             {currentUser?.role === "ADMIN" && (
@@ -191,7 +205,13 @@ export default function UserList() {
                     </thead>
                     <tbody>
                         {users.map((user) => (
-                            <UserView user={user} setUser={setUsers} key={user.id} />
+                            <UserView 
+                                user={user} 
+                                setUser={setUsers} 
+                                currentUserId={currentUser?.user_id}
+                                onSelfDelete={handleSelfDelete}
+                                key={user.id} 
+                            />
                         ))}
                     </tbody>
                 </table>
