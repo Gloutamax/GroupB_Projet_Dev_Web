@@ -10,12 +10,18 @@ export default function Button({
         onClick?.(event);
     }
     const defaultStyle = {
+        padding: '5px 10px',
+        cursor: 'pointer',
+        border: '1px solid #ccc',
+        borderRadius: '4px',
+        backgroundColor: '#fff',
         ...(style ?? {}),
     };
 
     switch (variant) {
         case "delete": 
             defaultStyle.backgroundColor = "red";
+            defaultStyle.color = "white";
             break;
         case "icon":
             defaultStyle.borderRadius = "50%";

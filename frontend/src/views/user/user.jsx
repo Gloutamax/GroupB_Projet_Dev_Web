@@ -27,35 +27,46 @@ function UserView({ user, setUser }) {
 
     return (
         <>
-            <div data-test-id={user.id}>
-                <span>{user.username}</span>
-                <span style={{ marginLeft: 5 }}>{user.email}</span>
-                <Button
-                    variant="icon"
-                    title="Modifier"
-                    onClick={() => setEditMode((prev) => !prev)}
-                />
-                <Button variant="delete" title="Supprimer" onClick={handleDelete} />
-            </div>
+            <tr data-test-id={user.id}>
+                <td>{user.id}</td>
+                <td>{user.username}</td>
+                <td>{user.email}</td>
+                <td>{user.role}</td>
+                <td>
+                    <Button
+                        title="Modifier"
+                        onClick={() => setEditMode((prev) => !prev)}
+                        style={{ marginRight: '5px' }}
+                    />
+                    <Button variant="delete" title="Supprimer" onClick={handleDelete} />
+                </td>
+            </tr>
             {editMode && (
-                <form onSubmit={handleEdit}>
-                    <input
-                        name="username"
-                        placeholder="username"
-                        defaultValue={user.username}
-                    />
-                    <input
-                        name="email"
-                        placeholder="email"
-                        defaultValue={user.email}
-                    />
-                    <textarea
-                        name="password"
-                        placeholder="password"
-                        defaultValue={user.password}
-                    ></textarea>
-                    <Button title="Mettre à jour" type="submit" />
-                </form>
+                <tr>
+                    <td colSpan="5">
+                        <form onSubmit={handleEdit} style={{ padding: '10px', backgroundColor: '#f0f0f0' }}>
+                            <input
+                                name="username"
+                                placeholder="username"
+                                defaultValue={user.username}
+                                style={{ marginRight: '10px' }}
+                            />
+                            <input
+                                name="email"
+                                placeholder="email"
+                                defaultValue={user.email}
+                                style={{ marginRight: '10px' }}
+                            />
+                            <input
+                                name="password"
+                                type="password"
+                                placeholder="nouveau mot de passe (optionnel)"
+                                style={{ marginRight: '10px' }}
+                            />
+                            <Button title="Mettre à jour" type="submit" />
+                        </form>
+                    </td>
+                </tr>
             )}
         </>
     );
@@ -113,14 +124,28 @@ export default function UserList() {
     }
 
     return (
-        <div>
+        <div style={{ padding: '20px' }}>
             {currentUser?.role === "ADMIN" && (
                 <>
                     <h2>Create User</h2>
-                    <form onSubmit={handleCreate}>
-                        <input name="username" placeholder="username"/>
-                        <input name="email" placeholder="email" type="email"/>
-                        <input name="password" placeholder="password" type="password"/>
+                    <form onSubmit={handleCreate} style={{ marginBottom: '20px' }}>
+                        <input 
+                            name="username" 
+                            placeholder="username"
+                            style={{ marginRight: '10px' }}
+                        />
+                        <input 
+                            name="email" 
+                            placeholder="email" 
+                            type="email"
+                            style={{ marginRight: '10px' }}
+                        />
+                        <input 
+                            name="password" 
+                            placeholder="password" 
+                            type="password"
+                            style={{ marginRight: '10px' }}
+                        />
                         <Button title="Create" type="submit"/>
                     </form>
                 </>
@@ -131,10 +156,30 @@ export default function UserList() {
                     : "My Profile"
                 }
             </h2>
-            {users.map((user) => (
-                <UserView user={user} setUser={setUsers} key={user.id} />
-            ))}
-            {users.length === 0 && <p>No users found.</p>}
+            {users.length > 0 ? (
+                <table style={{ 
+                    width: '100%', 
+                    borderCollapse: 'collapse',
+                    marginTop: '20px'
+                }}>
+                    <thead>
+                        <tr style={{ backgroundColor: '#1a52ccff' }}>
+                            <th style={{ border: '1px solid #ddd', padding: '8px' }}>ID</th>
+                            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Username</th>
+                            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Email</th>
+                            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Role</th>
+                            <th style={{ border: '1px solid #ddd', padding: '8px' }}>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {users.map((user) => (
+                            <UserView user={user} setUser={setUsers} key={user.id} />
+                        ))}
+                    </tbody>
+                </table>
+            ) : (
+                <p>No users found.</p>
+            )}
         </div>
     );
 }
