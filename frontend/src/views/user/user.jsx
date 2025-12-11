@@ -7,7 +7,7 @@ function UserView({ user, setUser }) {
     const [editMode, setEditMode] = useState(false);
 
     async function handleEdit(event) {
-        event.preventDeafault();
+        event.preventDefault(); // Correction: preventDefault au lieu de preventDeafault
         const form = event.currentTarget;
         const values = {
             username: form.username.value,
@@ -63,14 +63,40 @@ function UserView({ user, setUser }) {
 
 export default function UserList() {
     const [users, setUsers] = useState([]);
+    const [currentUser, setCurrentUser] = useState(null);
 
     useEffect(() => {
-        console.log("Loading users...");
-        UserService
-            .getUser()
-            .then((data) => setUsers(data))
-            .then(() => alert("Users loaded"))
-            .catch((e) => alert(e));
+        console.log("Loading user data...");
+        
+        // Récupérer l'utilisateur connecté depuis le token
+        const token = localStorage.getItem("token");
+        if (token) {
+            const [, payloadEncoded] = token.split(".");
+            const userDecoded = JSON.parse(atob(payloadEncoded));
+            setCurrentUser(userDecoded);
+            
+            // Si admin, charger tous les utilisateurs
+            if (userDecoded.role === "ADMIN") {
+                UserService
+                    .getAllUsers()
+                    .then((data) => {
+                        console.log("Users data:", data);
+                        setUsers(Array.isArray(data) ? data : []);
+                    })
+                    .then(() => console.log("Users loaded"))
+                    .catch((e) => alert(e));
+            } else {
+                // Si USER, charger uniquement ses propres données
+                UserService
+                    .getUser()
+                    .then((data) => {
+                        console.log("User data:", data);
+                        setUsers([data]); // Mettre l'utilisateur dans un tableau pour utiliser map
+                    })
+                    .then(() => console.log("User loaded"))
+                    .catch((e) => alert(e));
+            }
+        }
     }, []);
 
     async function handleCreate(event) {
@@ -88,14 +114,23 @@ export default function UserList() {
 
     return (
         <div>
-            <h2>Create User</h2>
-            <form onSubmit={handleCreate}>
-                <input name="username" placeholder="username"/>
-                <input name="email" placeholder="email" type="email"/>
-                <input name="password" placeholder="password" type="password"/>
-                <Button title="Create" type="submit"/>
-            </form>
-            <h2>User List ({users.length})</h2>
+            {currentUser?.role === "ADMIN" && (
+                <>
+                    <h2>Create User</h2>
+                    <form onSubmit={handleCreate}>
+                        <input name="username" placeholder="username"/>
+                        <input name="email" placeholder="email" type="email"/>
+                        <input name="password" placeholder="password" type="password"/>
+                        <Button title="Create" type="submit"/>
+                    </form>
+                </>
+            )}
+            <h2>
+                {currentUser?.role === "ADMIN" 
+                    ? `User List (${users.length})`
+                    : "My Profile"
+                }
+            </h2>
             {users.map((user) => (
                 <UserView user={user} setUser={setUsers} key={user.id} />
             ))}

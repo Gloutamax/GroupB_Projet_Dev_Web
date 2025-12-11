@@ -2,6 +2,21 @@ const { evaluatePasswordStrength } = require('../utils/passwordValidator');
 const User = require('../models/users');
 
 module.exports = {
+    getCurrentUser: async (req, res) => {
+        try {
+            // req.user contient déjà l'instance User complète depuis check-auth
+            const user = {
+                id: req.user.id,
+                username: req.user.username,
+                email: req.user.email,
+                role: req.user.role
+            };
+            res.json(user);
+        } catch (error) {
+            console.error('Error fetching current user:', error);
+            res.status(500).json({ error: 'Erreur lors de la récupération de l\'utilisateur connecté' });
+        }
+    },
     getAllUsers: async (req, res) => {
         try {
             const users = await User.findAll();

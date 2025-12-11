@@ -12,6 +12,7 @@ function App() {
   if (token) {
     const [, payloadEncoded] = token.split(".");
     userDecoded = JSON.parse(atob(payloadEncoded));
+    console.log("User decoded:", userDecoded); // Pour déboguer
   }
   const [user, setUser] = useState(userDecoded);
 
@@ -36,7 +37,7 @@ function App() {
         )}
         {user && (
           <>
-            <h2>Hello, {user.username}</h2>
+            <h2>Hello, {user.username || 'User'}</h2>
             <Button
               variant="delete"
               title="Se déconnecter"

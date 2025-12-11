@@ -9,6 +9,18 @@ export default {
         }
         return await response.json();
     },
+    getAllUsers: async function () {
+        const response = await api("/users");
+        if (response.status === 401) {
+            alert("You need to be connected");
+            throw new Error("You need to be connected");
+        }
+        if (response.status === 403) {
+            alert("You don't have permission to view all users");
+            throw new Error("Forbidden");
+        }
+        return await response.json();
+    },
     createUser: async function (userData) {
         const response = await api("/users", {
             method: "POST",
