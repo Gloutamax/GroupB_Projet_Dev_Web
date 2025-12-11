@@ -2,6 +2,7 @@ const { DataTypes, Model } = require("sequelize");
 const { connection } = require("../lib/db");
 //const Reservation = require("./reservations");
 // TODO : Importation de bcrypt pour hasher le mot de passe
+const bcrypt = require("bcrypt");
 
 class User extends Model {}
 
@@ -29,7 +30,14 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    // TODO : Ajouter les rôles (admin, user, etc.)
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false, 
+      defaultValue: "USER",
+      validate: {
+        isIn: [["ADMIN", "USER"]],
+      },
+    },
   },
   {
     sequelize: connection,
@@ -42,5 +50,20 @@ User.init(
 //User.hasMany(Reservation, { foreignKey: "userId" });
 
 // TODO : Ajouter des hooks avant la création et mise à jour pour hasher le mot de passe
+User.addHook("beforeCreate", async (instance) => {
+  instance.password = await bcrypt.hash(
+    instance.password, 
+    await bcrypt.genSalt()
+  );
+});
+
+User.addHook("beforeUpdate", async (instance, options) => {
+  if (options.fields.includes("password")) {
+    instance.password = await bcrypt.hash(
+      instance.password,
+      await bcrypt.genSalt()
+    );
+  }
+});
 
 module.exports = User;
