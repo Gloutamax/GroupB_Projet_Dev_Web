@@ -1,5 +1,6 @@
 const { DataTypes, Model } = require("sequelize");
 const { connection } = require("../lib/db");
+//const Reservation = require("./reservations");
 // TODO : Importation de bcrypt pour hasher le mot de passe
 
 class User extends Model {}
@@ -36,6 +37,9 @@ User.init(
     underscored: true,
   }
 );
+
+//associations
+//User.hasMany(Reservation, { foreignKey: "userId" });
 
 // TODO : Ajouter des hooks avant la création et mise à jour pour hasher le mot de passe
 

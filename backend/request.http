@@ -116,9 +116,22 @@ POST http://localhost:3000/reservations
 Content-Type: application/json
 
 {
+    "userId": 5,
+    //"materielId": 2,
     "title": "Reservation Test",
-    "description": "This is a test reservation"
+    "description": "This is a test reservation",
+    "startDate": "2025-12-05T10:00:00Z",
+    "endDate": "2025-12-05T10:00:00Z"
 }
 
 ###
-DELETE http://localhost:3000/reservations/2
+PATCH http://localhost:3000/reservations/10
+Content-Type: application/json
+
+{
+    "title": "Updated Reservation Test",
+    "description": "This is an updated test reservation"
+}
+
+###
+DELETE http://localhost:3000/reservations/10

@@ -16,10 +16,10 @@ Reservation.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    materielId: {
+    /*materielId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
+    },*/
     title: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -45,7 +45,15 @@ Reservation.init(
 );
 
 // Associations
-Reservation.belongsTo(User, { foreignKey: "userId" });
+//Reservation.belongsTo(User, { foreignKey: "userId" });
 //Reservation.belongsTo(Materiel, { foreignKey: "materielId" });
+
+//hooks
+Reservation.addHook("beforeCreate", async (reservation, options) => {
+  const user = await User.findByPk(reservation.userId);
+  if (!user) {
+    throw new Error("Utilisateur introuvable");
+  }
+});
 
 module.exports = Reservation;
