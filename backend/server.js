@@ -1,11 +1,11 @@
 const express = require("express");
-// const cors = require("cors"); 
+const cors = require("cors"); 
 const app = express(); 
 const { getConnection } = require("./lib/db");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Pour parser application/x-www-form-urlencoded
-// app.use(cors());
+app.use(cors());
 
 function logRequests(req, res, next) {
     console.log("Request received: ", req.method, req.url);
@@ -50,16 +50,15 @@ app.post("/", (req, res, next) => {
 
 getConnection()
   .then(async () => {
-    // TODO: Décommenter quand les routes users seront disponibles
-    // const userRouter = require("./routes/users");
-    // const securityRouter = require("./routes/security");
+    const userRouter = require("./routes/users");
+    const securityRouter = require("./routes/security");
     const materialRouter = require("./routes/materiel");
-    // const reservationRouter = require("./routes/reservations");
+    const reservationRouter = require("./routes/reservations");
 
-    // app.use(userRouter);
-    // app.use(securityRouter);
+    app.use(userRouter);
+    app.use(securityRouter);
     app.use(materialRouter);
-    // app.use(reservationRouter);
+    app.use(reservationRouter);
 
     app.listen(3000, () => {
     console.log("Server listening on port 3000");

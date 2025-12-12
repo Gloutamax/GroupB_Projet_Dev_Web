@@ -1,19 +1,23 @@
+# PARTIE 1 : Tests route materiels avec un utilsiateur en rôle USER
 ## Récupérer tous les matériaux
 GET http://localhost:3000/materiels
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozNiwidXNlcm5hbWUiOiJuZXd1c2VyIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjU1Njc4NzF9.7jNjUxlgWi2rmNU0HB0-h7jy_ehOWbPqIdaQkZLhzW8
 
 ### Créer un matériel valide
 POST http://localhost:3000/materiels
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozNiwidXNlcm5hbWUiOiJuZXd1c2VyIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjU1Njc4NzF9.7jNjUxlgWi2rmNU0HB0-h7jy_ehOWbPqIdaQkZLhzW8
 
 {
-  "name": "Caméra HD",
-  "description": "Caméra 4K",
+  "name": "Ecran 4K",
+  "description": "Ecran ultra haute définition 27 pouces",
   "status": "available"
 }
 
 ### Créer un matériel invalide (422) 
 POST http://localhost:3000/materiels
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozNiwidXNlcm5hbWUiOiJuZXd1c2VyIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjU1Njc4NzF9.7jNjUxlgWi2rmNU0HB0-h7jy_ehOWbPqIdaQkZLhzW8
 
 {
   "title": "oops",
@@ -22,10 +26,12 @@ Content-Type: application/json
 
 ### Récupérer un matériel par ID
 GET http://localhost:3000/materiels/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozNiwidXNlcm5hbWUiOiJuZXd1c2VyIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjU1Njc4NzF9.7jNjUxlgWi2rmNU0HB0-h7jy_ehOWbPqIdaQkZLhzW8
 
 ### Modifier un matériel (PATCH)
 PATCH http://localhost:3000/materiels/2
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozNiwidXNlcm5hbWUiOiJuZXd1c2VyIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjU1Njc4NzF9.7jNjUxlgWi2rmNU0HB0-h7jy_ehOWbPqIdaQkZLhzW8
 
 {
   "status": "maintenance"
@@ -33,3 +39,58 @@ Content-Type: application/json
 
 ### Supprimer un matériel
 DELETE http://localhost:3000/materiels/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozNiwidXNlcm5hbWUiOiJuZXd1c2VyIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjU1Njc4NzF9.7jNjUxlgWi2rmNU0HB0-h7jy_ehOWbPqIdaQkZLhzW8
+
+###
+# PARTIE 2 : Test route users avec le rôle ADMIN
+GET http://localhost:3000/materiels
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJpYXQiOjE3NjQ4MzQ0MTZ9.wco0V_1HIutz2DtVGECitB8ehMgGDgiAJ9qsNxAr_3w
+
+###
+POST http://localhost:3000/materiels
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJpYXQiOjE3NjQ4MzQ0MTZ9.wco0V_1HIutz2DtVGECitB8ehMgGDgiAJ9qsNxAr_3w
+
+{
+  "name": "Ecran 4K",
+  "description": "Ecran ultra haute définition 27 pouces",
+  "status": "available"
+}
+
+###
+# Matériel invalide (422)
+POST http://localhost:3000/materiels
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJpYXQiOjE3NjQ4MzQ0MTZ9.wco0V_1HIutz2DtVGECitB8ehMgGDgiAJ9qsNxAr_3w
+
+{
+  "title": "oops",
+  "email": "not-expected@example.com"
+}
+
+### Récupérer un matériel par ID
+GET http://localhost:3000/materiels/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJpYXQiOjE3NjQ4MzQ0MTZ9.wco0V_1HIutz2DtVGECitB8ehMgGDgiAJ9qsNxAr_3w
+
+### Modifier un matériel (PATCH)
+PATCH http://localhost:3000/materiels/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJpYXQiOjE3NjQ4MzQ0MTZ9.wco0V_1HIutz2DtVGECitB8ehMgGDgiAJ9qsNxAr_3w
+
+{
+  "status": "available"
+}
+
+### Supprimer un matériel
+DELETE http://localhost:3000/materiels/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJpYXQiOjE3NjQ4MzQ0MTZ9.wco0V_1HIutz2DtVGECitB8ehMgGDgiAJ9qsNxAr_3w
+
+###
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email": "newuser@example.com",
+    "password": "SecurePass123!"
+}
+
