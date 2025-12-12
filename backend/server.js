@@ -1,17 +1,20 @@
 const express = require("express");
 const app = express();
-const materielController = require("./Controllers/materiel"); // chemin en minuscules
+const materielController = require("./Controllers/materiel");
+const { getConnection } = require("./lib/db");
 
 app.use(express.json());
 
 // Routes CRUD
-app.get("/materiel", materielController.cget);              // GET all
-app.post("/materiel", materielController.create);           // POST create
-app.get("/materiel/:id", materielController.get);           // GET one by id
-app.patch("/materiel/:id", materielController.patch);       // PATCH update
-app.delete("/materiel/:id", materielController.delete);     // DELETE one
+app.get("/materiel", materielController.cget);
+app.post("/materiel", materielController.create);
+app.get("/materiel/:id", materielController.get);
+app.patch("/materiel/:id", materielController.patch);
+app.delete("/materiel/:id", materielController.delete);
 
-// Démarrage du serveur
-app.listen(3000, () => {
-  console.log("Server running on port 3000");
+// Connexion DB + démarrage serveur
+getConnection().then(() => {
+  app.listen(3000, () => {
+    console.log("Server running on port 3000");
+  });
 });

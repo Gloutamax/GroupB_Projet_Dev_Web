@@ -4,7 +4,10 @@ const DB = {
     if (DB.connection) return DB.connection;
     const { Sequelize } = require("sequelize");
 
-    const connection = new Sequelize(process.env.DATABASE_URL);
+     const connection = new Sequelize(process.env.DATABASE_URL, {
+      dialect: "mysql",   
+      logging: false     
+    });
 
     await connection.authenticate();
     console.log("Database connected");
