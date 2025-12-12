@@ -1,15 +1,10 @@
-const { Router } = require("express");
-const MaterialController = require("../controllers/materiel");
-const router = Router();
-const checkAuth = require("../middlewares/check-auth");
-const checkRole = require("../middlewares/check-role");
+const express = require("express");
+const router = express.Router();
+const materialController = require("../controllers/materiel");
 
-router.get("/materiels", checkAuth, checkRole(["ADMIN","USER"]), MaterialController.cget);
-
-router.post("/materiels", checkAuth, checkRole(["ADMIN"]), MaterialController.create);
-
-router.get("/materiels/:id", checkAuth, checkRole(["ADMIN","USER"]), MaterialController.get);
-router.patch("/materiels/:id", checkAuth, checkRole(["ADMIN"]), MaterialController.patch);
-router.delete("/materiels/:id", checkAuth, checkRole(["ADMIN"]), MaterialController.delete);
+router.post("/", materialController.create);
+router.get("/available", materialController.get);
+router.patch("/:id/status", materialController.patch);
+router.delete("/:id", materialController.delete);
 
 module.exports = router;

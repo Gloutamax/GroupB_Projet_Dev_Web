@@ -2,10 +2,10 @@ services:
   db: 
     image: postgres:16
     environment:
-      - POSTGRES_USER=user
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
       - POSTGRES_DB=app_db
-    volumes: 
+    volumes:
       - db-data:/var/lib/postgresql/data
 
   backend: 
@@ -14,7 +14,7 @@ services:
     volumes: 
     - ./backend:/app
     environment: 
-      - DATABASE_URL=postgres://user:password@db:5432/app_db
+      - DB_URL=postgresql://user:password@db:5432/app_db
     depends_on:
       - db
     ports: 
@@ -26,8 +26,6 @@ services:
     working_dir: /app
     volumes:
       - ./frontend:/app
-    environment:
-      - VITE_API_URL=http://localhost:3000
     depends_on:
       - backend
     ports:
