@@ -1,29 +1,47 @@
 const { DataTypes, Model } = require("sequelize");
-const DB = require("../lib/db");
+const { connection } = require("../lib/db");
 
 class Material extends Model {}
 
-async function initMaterialModel() {
-  const sequelize = await DB.getConnection(); 
-
-  Material.init(
-    {
-      id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-      name: { type: DataTypes.STRING, allowNull: false },
-      description: { type: DataTypes.TEXT },
-      status: {
-        type: DataTypes.ENUM("available", "reserved", "maintenance", "unavailable"),
-        defaultValue: "available",
-      },
+Material.init(
+  {
+    id: {
+      type: DataTypes.INTEGER, 
+      primaryKey: true, 
+      autoIncrement: true,
     },
-    {
-      sequelize,
-      tableName: "materials",
-      underscored: true,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    status: {
+      type: DataTypes.ENUM("available", "reserved", "maintenance", "unavailable"),
+      defaultValue: "available",
+      allowNull: false,
+    },
+    description: {
+      type: DataTypes.STRING,
+      allowNull: true
+    },
+  },
+  {
+    sequelize: connection, 
+    tableName: "materials",
+    underscored: true,
+    validate: {
+      // Validation personnalisée pour rejeter les champs non attendus
+      noExtraFields() {
+        const allowedFields = ['name', 'status', 'description'];
+        const providedFields = Object.keys(this.dataValues).filter(
+          key => !['id', 'createdAt', 'updatedAt', 'created_at', 'updated_at'].includes(key)
+        );
+        const extraFields = providedFields.filter(field => !allowedFields.includes(field));
+        if (extraFields.length > 0) {
+          throw new Error(`Champs non autorisés: ${extraFields.join(', ')}`);
+        }
+      }
     }
-  );
+  }
+);
 
-  return Material;
-}
-
-module.exports = initMaterialModel;
+module.exports = Material;
