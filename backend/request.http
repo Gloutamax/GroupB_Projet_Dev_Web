@@ -176,6 +176,34 @@ Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJp
 ###
 # Test de la route delete pour supprimer un utilisateur par ID
 DELETE http://localhost:3000/users/1
+
+###
+GET http://localhost:3000/reservations
+
+###
+POST http://localhost:3000/reservations
+Content-Type: application/json
+
+{
+    "userId": 5,
+    //"materielId": 2,
+    "title": "Reservation Test",
+    "description": "This is a test reservation",
+    "startDate": "2025-12-05T10:00:00Z",
+    "endDate": "2025-12-05T10:00:00Z"
+}
+
+###
+PATCH http://localhost:3000/reservations/10
+Content-Type: application/json
+
+{
+    "title": "Updated Reservation Test",
+    "description": "This is an updated test reservation"
+}
+
+###
+DELETE http://localhost:3000/reservations/10
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ4NDI5NDh9.IrKRw_ScFsLZj1TcHgEsE4BXH0Ca3AM2nJdRWWx53QY
 
 ###
