@@ -20,13 +20,16 @@ module.exports = {
             return res.status(401).json({ message: "Forbidden"});
         }
 
-        return res.json({
-            token: jwt.sign(
-                {
-                    user_id : user.id,
-                },
-                process.env.JWT_SECRET ?? "MY_SECRET_KEY"
-            ),
-        });
+        // Créer le token avec username et role
+        const token = jwt.sign(
+            { 
+                user_id: user.id,
+                username: user.username,
+                role: user.role 
+            },
+            process.env.JWT_SECRET ?? "MY_SECRET_KEY"
+        );
+        
+        res.json({ token });
     },
 };

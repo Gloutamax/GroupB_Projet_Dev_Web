@@ -7,6 +7,9 @@ const checkRole = require('../middlewares/check-role');
 // Route publique pour l'inscription (sans authentification)
 router.post('/signup', UserController.signupUser);
 
+// Route pour récupérer l'utilisateur connecté
+router.get('/user', checkAuth, UserController.getCurrentUser);
+
 // Affichage de tous les utilisateurs 
 router.get('/users', checkAuth, checkRole(["ADMIN"]), UserController.getAllUsers); 
 

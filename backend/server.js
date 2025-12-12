@@ -1,9 +1,11 @@
 const express = require("express");
+const cors = require("cors"); 
 const app = express(); 
 const { getConnection } = require("./lib/db");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); // Pour parser application/x-www-form-urlencoded
+app.use(cors());
 
 function logRequests(req, res, next) {
     console.log("Request received: ", req.method, req.url);

@@ -2,6 +2,21 @@ const { evaluatePasswordStrength } = require('../utils/passwordValidator');
 const User = require('../models/users');
 
 module.exports = {
+    getCurrentUser: async (req, res) => {
+        try {
+            // req.user contient déjà l'instance User complète depuis check-auth
+            const user = {
+                id: req.user.id,
+                username: req.user.username,
+                email: req.user.email,
+                role: req.user.role
+            };
+            res.json(user);
+        } catch (error) {
+            console.error('Error fetching current user:', error);
+            res.status(500).json({ error: 'Erreur lors de la récupération de l\'utilisateur connecté' });
+        }
+    },
     getAllUsers: async (req, res) => {
         try {
             const users = await User.findAll();
@@ -91,11 +106,34 @@ module.exports = {
                 return res.status(403).json({ error: "Accès interdit. Vous ne pouvez modifier que vos propres données." });
             }
             
-            const [nbUpdated, [user]] = await User.update(req.body, {
+            // Préparer les données à mettre à jour
+            const updateData = {};
+            const fieldsToUpdate = [];
+            
+            if (req.body.username) {
+                updateData.username = req.body.username;
+                fieldsToUpdate.push('username');
+            }
+            if (req.body.email) {
+                updateData.email = req.body.email;
+                fieldsToUpdate.push('email');
+            }
+            if (req.body.password) {
+                updateData.password = req.body.password;
+                fieldsToUpdate.push('password');
+            }
+            if (req.body.role && req.user.role === 'ADMIN') {
+                updateData.role = req.body.role;
+                fieldsToUpdate.push('role');
+            }
+            
+            const [nbUpdated, [user]] = await User.update(updateData, {
                 where: { id },
                 returning: true,
                 individualHooks: true,
+                fields: fieldsToUpdate,
             });
+            
             if (nbUpdated === 0) {
                return res.status(404).json({ error: "Utilisateur non trouvé." });
             }
