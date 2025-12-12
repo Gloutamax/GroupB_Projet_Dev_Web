@@ -28,9 +28,20 @@ Material.init(
     sequelize: connection, 
     tableName: "materials",
     underscored: true,
+    validate: {
+      // Validation personnalisée pour rejeter les champs non attendus
+      noExtraFields() {
+        const allowedFields = ['name', 'status', 'description'];
+        const providedFields = Object.keys(this.dataValues).filter(
+          key => !['id', 'createdAt', 'updatedAt', 'created_at', 'updated_at'].includes(key)
+        );
+        const extraFields = providedFields.filter(field => !allowedFields.includes(field));
+        if (extraFields.length > 0) {
+          throw new Error(`Champs non autorisés: ${extraFields.join(', ')}`);
+        }
+      }
+    }
   }
 );
-
-// ? Hooks à ajouter ? 
 
 module.exports = Material;

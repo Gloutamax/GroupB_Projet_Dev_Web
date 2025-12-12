@@ -8,6 +8,16 @@ module.exports = {
     try {
       res.status(201).json(await Material.create(req.body));
     } catch (e) {
+      // Gérer les erreurs de validation Sequelize
+      if (e.name === 'SequelizeValidationError' || e.name === 'SequelizeUniqueConstraintError') {
+        return res.status(422).json({
+          error: 'Validation error',
+          details: e.errors ? e.errors.map(err => ({
+            field: err.path,
+            message: err.message
+          })) : e.message
+        });
+      }
       next(e);
     }
   },
@@ -33,6 +43,16 @@ module.exports = {
 
       return res.json(MaterialUpdated);
     } catch(e) {
+      // Gérer les erreurs de validation Sequelize
+      if (e.name === 'SequelizeValidationError' || e.name === 'SequelizeUniqueConstraintError') {
+        return res.status(422).json({
+          error: 'Validation error',
+          details: e.errors ? e.errors.map(err => ({
+            field: err.path,
+            message: err.message
+          })) : e.message
+        });
+      }
       next(e);
     }
   },

@@ -1,8 +1,8 @@
-### Récupérer tous les matériaux
-GET http://localhost:3000/materiel
+## Récupérer tous les matériaux
+GET http://localhost:3000/materiels
 
 ### Créer un matériel valide
-POST http://localhost:3000/materiel
+POST http://localhost:3000/materiels
 Content-Type: application/json
 
 {
@@ -11,8 +11,8 @@ Content-Type: application/json
   "status": "available"
 }
 
-### Créer un matériel invalide (→ 422 si ton modèle a des validations Sequelize)
-POST http://localhost:3000/materiel
+### Créer un matériel invalide (422) 
+POST http://localhost:3000/materiels
 Content-Type: application/json
 
 {
@@ -21,10 +21,10 @@ Content-Type: application/json
 }
 
 ### Récupérer un matériel par ID
-GET http://localhost:3000/materiel/1
+GET http://localhost:3000/materiels/2
 
 ### Modifier un matériel (PATCH)
-PATCH http://localhost:3000/materiel/1
+PATCH http://localhost:3000/materiels/2
 Content-Type: application/json
 
 {
@@ -32,4 +32,4 @@ Content-Type: application/json
 }
 
 ### Supprimer un matériel
-DELETE http://localhost:3000/materiel/1
+DELETE http://localhost:3000/materiels/2

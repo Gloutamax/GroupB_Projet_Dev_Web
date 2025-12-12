@@ -3,8 +3,8 @@ const { getConnection } = require("./lib/db");
 getConnection()
   .then(async (connection) => {
     // On importe les modèles ici
-    const User = require("./models/users");
-    const Reservation = require("./models/reservations");
+    // const User = require("./models/users");
+    // const Reservation = require("./models/reservations");
     const Material = require("./models/materiel");
     return connection;
   })
