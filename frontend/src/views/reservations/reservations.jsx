@@ -15,7 +15,6 @@ function ReservationView({ reservation, setReservations, isAdmin }) {
     event.preventDefault();
     const form = event.currentTarget;
     const values = {
-      // ❌ on ne touche plus au materielId
       startDate: form.startDate.value,
       endDate: form.endDate.value,
     };
@@ -57,7 +56,6 @@ function ReservationView({ reservation, setReservations, isAdmin }) {
         <tr>
           <td colSpan={isAdmin ? 6 : 5}>
             <form onSubmit={handleEdit}>
-              {/* ❌ champ materielId supprimé */}
               <input
                 name="startDate"
                 type="date"
