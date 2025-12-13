@@ -1,6 +1,6 @@
 const express = require("express");
-const cors = require("cors"); 
-const app = express(); 
+const cors = require("cors");
+const app = express();
 const { getConnection } = require("./lib/db");
 
 app.use(express.json());
@@ -52,6 +52,8 @@ app.post("/", (req, res, next) => {
 
 getConnection()
   .then(async () => {
+    require("./models/index.js");
+
     const userRouter = require("./routes/users");
     const securityRouter = require("./routes/security");
     const materialRouter = require("./routes/materiel");
@@ -72,6 +74,6 @@ getConnection()
 
 // Middleware de gestion d'erreur global (doit être après toutes les routes)
 app.use((error, req, res, next) => {
-    console.error('Global error handler:', error);
-    res.status(500).json({ error: 'Une erreur interne est survenue' });
+  console.error("Global error handler:", error);
+  res.status(500).json({ error: "Une erreur interne est survenue" });
 });

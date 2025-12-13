@@ -4,12 +4,28 @@ const router = Router();
 const checkAuth = require("../middlewares/check-auth");
 const checkRole = require("../middlewares/check-role");
 
-router.get("/materiels", checkAuth, checkRole(["ADMIN","USER"]), MaterialController.cget);
+// Routes publiques (lecture)
+router.get("/materiels", MaterialController.cget);
+router.get("/materiels/:id", MaterialController.get);
 
-router.post("/materiels", checkAuth, checkRole(["ADMIN"]), MaterialController.create);
-
-router.get("/materiels/:id", checkAuth, checkRole(["ADMIN","USER"]), MaterialController.get);
-router.patch("/materiels/:id", checkAuth, checkRole(["ADMIN"]), MaterialController.patch);
-router.delete("/materiels/:id", checkAuth, checkRole(["ADMIN"]), MaterialController.delete);
+// Routes protégées admin (création, modification, suppression)
+router.post(
+  "/materiels",
+  checkAuth,
+  checkRole(["admin"]),
+  MaterialController.create
+);
+router.patch(
+  "/materiels/:id",
+  checkAuth,
+  checkRole(["admin"]),
+  MaterialController.patch
+);
+router.delete(
+  "/materiels/:id",
+  checkAuth,
+  checkRole(["admin"]),
+  MaterialController.delete
+);
 
 module.exports = router;
