@@ -5,7 +5,7 @@ getConnection()
     // On importe les modèles ici
     const User = require("./models/users");
     const Reservation = require("./models/reservations");
-    // TODO : Importer les autres modèles ici pour la synchronisation des autres tables
+    const Material = require("./models/materiel");
     return connection;
   })
   .then((connection) =>

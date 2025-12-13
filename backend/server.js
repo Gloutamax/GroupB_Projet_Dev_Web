@@ -54,15 +54,13 @@ getConnection()
   .then(async () => {
     const userRouter = require("./routes/users");
     const securityRouter = require("./routes/security");
-    //TODO : Route pour les matériels a ajouter ici
+    const materialRouter = require("./routes/materiel");
     const reservationRouter = require("./routes/reservations");
-    //TODO : Route pour le suivi d'usage a ajouter ici
 
     app.use(userRouter);
     app.use(securityRouter);
-    //TODO : Utilisation de la route pour les matériels a ajouter ici
+    app.use(materialRouter);
     app.use(reservationRouter);
-    //TODO : Utilisation de la route pour le suivi d'usage a ajouter ici
 
     app.listen(3000, () => {
       console.log("Server listening on port 3000");
@@ -74,6 +72,6 @@ getConnection()
 
 // Middleware de gestion d'erreur global (doit être après toutes les routes)
 app.use((error, req, res, next) => {
-  console.error("Global error handler:", error);
-  res.status(500).json({ error: "Une erreur interne est survenue" });
+    console.error('Global error handler:', error);
+    res.status(500).json({ error: 'Une erreur interne est survenue' });
 });

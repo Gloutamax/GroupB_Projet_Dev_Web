@@ -1,168 +1,79 @@
-# -- TEST DES ROUTES PAR DEFAUT --
-# Test de la route get par défaut
-GET http://localhost:3000/
+# PARTIE 1 : Tests route materiels avec un utilsiateur en rôle USER
+## Récupérer tous les matériaux
+GET http://localhost:3000/materiels
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozNiwidXNlcm5hbWUiOiJuZXd1c2VyIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjU1Njc4NzF9.7jNjUxlgWi2rmNU0HB0-h7jy_ehOWbPqIdaQkZLhzW8
 
-###
-
-# Test de la route post par défaut
-POST http://localhost:3000/
+### Créer un matériel valide
+POST http://localhost:3000/materiels
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozNiwidXNlcm5hbWUiOiJuZXd1c2VyIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjU1Njc4NzF9.7jNjUxlgWi2rmNU0HB0-h7jy_ehOWbPqIdaQkZLhzW8
 
 {
-    "message": "Hello, World!"
+  "name": "Ecran 4K",
+  "description": "Ecran ultra haute définition 27 pouces",
+  "status": "available"
 }
 
-###
-POST http://localhost:3000/
-Content-Type: application/x-www-form-urlencoded
-
-username=testuser&email=testuser@example.com
-
-###
-POST http://localhost:3000/
-Content-Type: application/xml
-
-<user>
-    <username>exampleuser</username>
-    <password>examplepass</password>
-</user>
-
-###
-
-# -- TEST DES ROUTES UTILISATEURS --
-# Test de la route get pour récupérer tous les utilisateurs (401 car pas d'authentification)
-GET http://localhost:3000/users
-
-###
-# Test de la route post pour créer un nouvel utilisateur
-POST http://localhost:3000/users
-Content-Type : application/json
-
-{
-    "id": 1,
-    "username": "admin",
-    "email": "admin@example.com",
-    "password": "AdminPass123!",
-    "role": "ADMIN"
-}
-
-###
-# Se connecter et récupérer le token JWT pour le compte admin
-POST http://localhost:3000/login
+### Créer un matériel invalide (422) 
+POST http://localhost:3000/materiels
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozNiwidXNlcm5hbWUiOiJuZXd1c2VyIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjU1Njc4NzF9.7jNjUxlgWi2rmNU0HB0-h7jy_ehOWbPqIdaQkZLhzW8
 
 {
-    "email": "admin@example.com",
-    "password": "AdminPass123!"
+  "title": "oops",
+  "email": "not-expected@example.com"
 }
 
-###
+### Récupérer un matériel par ID
+GET http://localhost:3000/materiels/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozNiwidXNlcm5hbWUiOiJuZXd1c2VyIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjU1Njc4NzF9.7jNjUxlgWi2rmNU0HB0-h7jy_ehOWbPqIdaQkZLhzW8
 
-# Se connecter et récupérer le token JWT pour le compte utilisateur
-POST http://localhost:3000/login
+### Modifier un matériel (PATCH)
+PATCH http://localhost:3000/materiels/2
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozNiwidXNlcm5hbWUiOiJuZXd1c2VyIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjU1Njc4NzF9.7jNjUxlgWi2rmNU0HB0-h7jy_ehOWbPqIdaQkZLhzW8
 
 {
-    "email": "jdaub@gmail.com",
-    "password": "StrongPassword1!"
+  "status": "maintenance"
 }
 
+### Supprimer un matériel
+DELETE http://localhost:3000/materiels/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozNiwidXNlcm5hbWUiOiJuZXd1c2VyIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3NjU1Njc4NzF9.7jNjUxlgWi2rmNU0HB0-h7jy_ehOWbPqIdaQkZLhzW8
+
 ###
-# Utiliser le token pour accéder aux routes protégées 
-GET http://localhost:3000/users
+# PARTIE 2 : Test route users avec le rôle ADMIN
+GET http://localhost:3000/materiels
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJpYXQiOjE3NjQ4MzQ0MTZ9.wco0V_1HIutz2DtVGECitB8ehMgGDgiAJ9qsNxAr_3w
 
 ###
-# Test de la route get pour récupérer tous les utilisateurs (interdit pour les USER => 403 Forbidden)
-GET http://localhost:3000/users
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ4NDI5NDh9.IrKRw_ScFsLZj1TcHgEsE4BXH0Ca3AM2nJdRWWx53QY
-
-###
-# Test de la route get sans authentification (=> 401 Unauthorized)
-GET http://localhost:3000/users
-
-### ==> RETURN 422
-POST http://localhost:3000/users
-Content-Type: application/json
-
-{
-    "username": "testuser",
-    "email": "testuser@example.com"
-}
-
-### ==> RETURN 422 - Email manquant
-POST http://localhost:3000/users
-Content-Type: application/json
-
-{
-    "username": "testuser"
-}
-
-### ==> RETURN 422 - Password manquant
-POST http://localhost:3000/users
-Content-Type: application/json
-
-{
-    "username": "testuser",
-    "email": "testuser@example.com"
-}
-
-### ==> RETURN 422 - Email invalide
-POST http://localhost:3000/users
-Content-Type: application/json
-
-{
-    "username": "testuser",
-    "email": "invalidemail",
-    "password": "test123"
-}
-
-### ==> RETURN 201 - Création réussie
-POST http://localhost:3000/users
-Content-Type: application/json
-
-{
-    "username": "testuser",
-    "email": "testuser@example.com",
-    "password": "Test123!@#"
-}
-###
-# Creation de l'utilisateur avec l'ID 2 (utilisateur) pour les tests suivants
-POST http://localhost:3000/users
+POST http://localhost:3000/materiels
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJpYXQiOjE3NjQ4MzQ0MTZ9.wco0V_1HIutz2DtVGECitB8ehMgGDgiAJ9qsNxAr_3w
 
 {
-    "id": 1,
-    "username": "jdaub",
-    "email": "jdaub@gmail.com",
-    "password": "StrongPassword1!"
+  "name": "Ecran 4K",
+  "description": "Ecran ultra haute définition 27 pouces",
+  "status": "available"
 }
 
 ###
-# Test de la route get pour récupérer un utilisateur par ID (avec le même ID de l'utilisateur qui souhaite voir ces données)
-GET http://localhost:3000/users/1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ4NDI5NDh9.IrKRw_ScFsLZj1TcHgEsE4BXH0Ca3AM2nJdRWWx53QY
-
-###
-
-# Vérifier qu'un utilisateur connecté ne peut pas voir les données d'un autre utilisateur (interdit pour les USER => 403 Forbidden)
-GET http://localhost:3000/users/3
-Authorization : Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ4NDI5NDh9.IrKRw_ScFsLZj1TcHgEsE4BXH0Ca3AM2nJdRWWx53QY
-
-###
-# Test de la route put pour mettre à jour un utilisateur par ID
-PATCH http://localhost:3000/users/1
+# Matériel invalide (422)
+POST http://localhost:3000/materiels
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpYXQiOjE3NjQ4NDI5NDh9.IrKRw_ScFsLZj1TcHgEsE4BXH0Ca3AM2nJdRWWx53QY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJpYXQiOjE3NjQ4MzQ0MTZ9.wco0V_1HIutz2DtVGECitB8ehMgGDgiAJ9qsNxAr_3w
 
 {
-    "username": "daubj",
-    "email": "daubj@gmail.com"
+  "title": "oops",
+  "email": "not-expected@example.com"
 }
 
-###
+### Récupérer un matériel par ID
+GET http://localhost:3000/materiels/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJpYXQiOjE3NjQ4MzQ0MTZ9.wco0V_1HIutz2DtVGECitB8ehMgGDgiAJ9qsNxAr_3w
 
+### Modifier un matériel (PATCH)
+PATCH http://localhost:3000/materiels/3
 # Tentative de mise à jour d'un autre utilisateur (interdit pour les USER => 403 Forbidden) 
 PATCH http://localhost:3000/users/3
 Content-Type: application/Json
@@ -215,12 +126,15 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxLCJpY
 # Inscription publique (sans authentification)
 POST http://localhost:3000/signup
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJpYXQiOjE3NjQ4MzQ0MTZ9.wco0V_1HIutz2DtVGECitB8ehMgGDgiAJ9qsNxAr_3w
 
 {
-    "username": "newuser",
-    "email": "newuser@example.com",
-    "password": "SecurePass123!"
+  "status": "available"
 }
+
+### Supprimer un matériel
+DELETE http://localhost:3000/materiels/2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjozLCJpYXQiOjE3NjQ4MzQ0MTZ9.wco0V_1HIutz2DtVGECitB8ehMgGDgiAJ9qsNxAr_3w
 
 ###
 POST http://localhost:3000/login
