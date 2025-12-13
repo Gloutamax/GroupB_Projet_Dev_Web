@@ -30,7 +30,7 @@ User.init(
     },
     role: {
       type: DataTypes.STRING,
-      allowNull: false, 
+      allowNull: false,
       defaultValue: "USER",
       validate: {
         isIn: [["ADMIN", "USER"]],
@@ -44,9 +44,10 @@ User.init(
   }
 );
 
+// TODO : Ajouter des hooks avant la création et mise à jour pour hasher le mot de passe
 User.addHook("beforeCreate", async (instance) => {
   instance.password = await bcrypt.hash(
-    instance.password, 
+    instance.password,
     await bcrypt.genSalt()
   );
 });
