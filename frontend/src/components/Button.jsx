@@ -14,7 +14,7 @@ export default function Button({
         cursor: 'pointer',
         border: '1px solid #ccc',
         borderRadius: '4px',
-        backgroundColor: '#fff',
+        backgroundColor: '#000000ff',
         ...(style ?? {}),
     };
 

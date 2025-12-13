@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import Button from "../../components/button"; 
+import Button from "../../components/Button"; 
 import UserService from "../../services/user-service";
 
 function UserView({ user, setUser, currentUserId, onSelfDelete }) {

@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import './App.css';
-import Button from './components/button';
+import Button from './components/Button';
 import RegisterForm from "./views/security/register-form";
 import LoginForm from "./views/security/login-form";
 import UserView from "./views/user/user";
+import ReservationsView from "./views/reservations/reservations";
 
 function App() {
   const token = localStorage.getItem("token");
@@ -43,6 +44,7 @@ function App() {
               onClick={handleLogout}
             />
             <UserView />
+            <ReservationsView />
           </>
         )}
       </div>
